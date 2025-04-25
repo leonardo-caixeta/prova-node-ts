@@ -28,4 +28,3 @@ export interface IUserService {
   }): Promise<ServiceResponse<string> | ValidationResult>;
   deleteUser(id: number): Promise<ServiceResponse<string | GetUser>>;
 }
-

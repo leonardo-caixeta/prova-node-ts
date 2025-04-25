@@ -5,26 +5,25 @@ const prisma = new PrismaClient();
 async function main() {
   const adminRole = await prisma.role.create({
     data: {
-      name: 'Admin',
-    },
+      name: 'Admin'
+    }
   });
 
   const userRole = await prisma.role.create({
     data: {
-      name: 'User',
-    },
+      name: 'User'
+    }
   });
 
   console.log(`Created roles: ${adminRole.name}, ${userRole.name}`);
 
-  // Criação de Users
   const user1 = await prisma.user.create({
     data: {
       name: 'John Doe',
       email: 'john.doe@example.com',
-      password: '12345', // Você pode colocar uma senha já hashada para esse exemplo
-      cargoId: userRole.id,
-    },
+      password: '12345',
+      cargoId: userRole.id
+    }
   });
 
   const user2 = await prisma.user.create({
@@ -32,18 +31,17 @@ async function main() {
       name: 'Jane Doe',
       email: 'jane.doe@example.com',
       password: '12345',
-      cargoId: adminRole.id,
-    },
+      cargoId: adminRole.id
+    }
   });
-
   console.log(`Created users: ${user1.name}, ${user2.name}`);
 }
 
 // Chama a função principal
 main()
-  .catch(e => {
-    throw e
+  .catch((e) => {
+    throw e;
   })
   .finally(async () => {
-    await prisma.$disconnect()
+    await prisma.$disconnect();
   });

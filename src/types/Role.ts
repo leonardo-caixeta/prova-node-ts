@@ -1,4 +1,4 @@
-import { RoleDTO } from ".";
+import { RoleDTO } from '.';
 
 export interface IRoleCreate {
   name: string;
