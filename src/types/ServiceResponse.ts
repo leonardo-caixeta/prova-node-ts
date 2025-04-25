@@ -11,12 +11,12 @@ export type ServiceMessage = { message: string };
 
 export type ServiceResponseError = {
   status: ServiceStatus;
-  data: ServiceMessage;
+  message: string;
 };
 
-export type ServiceResponseSuccess<T> = {
+export type ServiceResponseSuccess<T = any> = {
   status: 'SUCCESSFUL' | 'CREATED';
-  data: T;
+  message: T;
 };
 
 export type ServiceResponse<T> =

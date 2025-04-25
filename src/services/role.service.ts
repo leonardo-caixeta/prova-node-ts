@@ -1,7 +1,9 @@
 import { PrismaClient } from '@prisma/client';
-import { GetRole, ServiceResponse, ValidationResult } from '../types';
+import { ValidationResult } from '../types';
 import { validateRole } from '../utils/validators';
 import { IRoleService } from '../interfaces/IServiceResponse';
+import { GetRole } from '../types/Role';
+import { ServiceResponse } from '../types/ServiceResponse';
 
 const prisma = new PrismaClient();
 

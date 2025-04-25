@@ -1,12 +1,14 @@
 import express from 'express';
+import router from './routes/role.route';
 //import userRoutes from './routes/user.route';
-//import roleRoutes from './routes/role.route';
 
 const app = express();
 app.use(express.json());
-
-//app.use('/users', userRoutes);
-//app.use('/roles', roleRoutes);
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+//app.use('/user', userRoutes);
+app.use('/role', router);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>

@@ -6,7 +6,8 @@
     "test": "jest",
     "dev": "nodemon src/index.ts",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
