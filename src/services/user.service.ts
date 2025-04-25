@@ -34,7 +34,7 @@ export class UserService implements IUserService {
   }
 
   async getAll(): Promise<ServiceResponse<GetUser[] | string>> {
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({include: { role: true }});
     if (!users) return { status: 'NOT_FOUND', message: 'No users found' };
 
     return { status: 'SUCCESSFUL', message: users };
