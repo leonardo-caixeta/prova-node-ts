@@ -7,7 +7,18 @@ export type ServiceStatus =
   | 'CONFLICT'
   | 'INVALID_TOKEN';
 
-export interface IServiceResponse<T = any> {
+export type ServiceMessage = { message: string };
+
+export type ServiceResponseError = {
   status: ServiceStatus;
-  message: T;
-}
+  data: ServiceMessage;
+};
+
+export type ServiceResponseSuccess<T> = {
+  status: 'SUCCESSFUL' | 'CREATED';
+  data: T;
+};
+
+export type ServiceResponse<T> =
+  | ServiceResponseError
+  | ServiceResponseSuccess<T>;

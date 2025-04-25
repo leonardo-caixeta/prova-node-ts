@@ -1,4 +1,3 @@
 export interface IRoleCreate {
-    name: string;
-  }
-  
+  name: string;
+}
