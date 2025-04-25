@@ -8,7 +8,7 @@ import { ServiceResponse } from '../types/ServiceResponse';
 const prisma = new PrismaClient();
 
 export class RoleService implements IRoleService {
-  async getAll(): Promise<ServiceResponse<GetRole[]> | ValidationResult> {
+  async getAll(): Promise<ServiceResponse<GetRole[]> | string> {
     const roles = await prisma.role.findMany();
     if (!roles) return { status: 'NOT_FOUND', message: 'No roles found' };
 
@@ -24,6 +24,17 @@ export class RoleService implements IRoleService {
       return {
         status: 'NOT_FOUND',
         message: `Role with id: ${id} not found`
+      };
+
+    return { status: 'SUCCESSFUL', message: unicRole };
+  }
+
+  async getByName(name: string): Promise<ServiceResponse<GetRole | string>> {
+    const unicRole = await prisma.role.findFirst({ where: { name } });
+    if (!unicRole)
+      return {
+        status: 'NOT_FOUND',
+        message: `Role with name: ${unicRole} not found`
       };
 
     return { status: 'SUCCESSFUL', message: unicRole };

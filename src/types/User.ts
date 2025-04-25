@@ -21,5 +21,4 @@ export interface IUserLogin {
 
 export interface GetUser extends IUserBase {
   cargoId: number;
-  role: [];
 }

@@ -47,12 +47,15 @@ export const validateCreate = (data: {
   return { status: 'INVALID_DATA', message };
 };
 
-export const validateUpdate = (data: {
-  name: string;
-  email: string;
-  password?: string;
-}): ValidationResult => {
-  const validation = updateValidation.validate(data);
+export const validateUpdate = (
+  data: {
+    name: string;
+    email: string;
+    password?: string;
+  },
+  id: number
+): ValidationResult => {
+  const validation = updateValidation.validate({ ...data, id });
 
   const typeError = validation.error?.details[0].type;
   const message =

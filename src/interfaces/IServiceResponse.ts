@@ -1,11 +1,12 @@
 import { ValidationResult } from '../types';
 import { GetRole } from '../types/Role';
 import { ServiceResponse } from '../types/ServiceResponse';
-import { GetUser, IUserCreate, IUserUpdate } from '../types/User';
+import { GetUser, IUserCreate, IUserLogin, IUserUpdate } from '../types/User';
 
 export interface IRoleService {
-  getAll(): Promise<ServiceResponse<GetRole[]> | ValidationResult>;
+  getAll(): Promise<ServiceResponse<GetRole[]> | string>;
   getById(id: number): Promise<ServiceResponse<GetRole | string>>;
+  getByName(name: string): Promise<ServiceResponse<GetRole | string>>;
   create(data: {
     name: string;
   }): Promise<ServiceResponse<string> | ValidationResult>;
@@ -17,9 +18,12 @@ export interface IRoleService {
 }
 
 export interface IUserService {
-  getAll(): Promise<ServiceResponse<GetUser[]> | ValidationResult>;
+  login(data: IUserLogin): Promise<ServiceResponse<string> | ValidationResult>;
+  getAll(): Promise<ServiceResponse<GetUser[] | string>>;
   getById(id: number): Promise<ServiceResponse<GetUser | string>>;
-  create(data: IUserCreate): Promise<ServiceResponse<string> | ValidationResult>;
+  create(
+    data: IUserCreate
+  ): Promise<ServiceResponse<string> | ValidationResult>;
   update(req: {
     body: IUserUpdate;
     params: { id: number };
