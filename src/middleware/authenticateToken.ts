@@ -1,5 +1,8 @@
+import { PrismaClient } from '@prisma/client';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+
+const prisma = new PrismaClient();
 
 export function authenticateToken(
   req: Request,
@@ -13,11 +16,25 @@ export function authenticateToken(
     return res.status(401).json({ message: 'Token não fornecido' });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET as string, (err) => {
-    if (err) {
-      return res.status(403).json({ message: 'Token inválido' });
+  try {
+    const jwtSecret = process.env.JWT_SECRET as string;
+    const decoded = jwt.verify(token, jwtSecret) as { id: number };
+
+    const user = prisma.user.findUnique({
+      where: { id: decoded.id },
+      include: { role: true }
+    });
+    if (!user) {
+      return res.status(401).json({ message: 'User not found' });
     }
 
+    req.user = {
+      id: decoded.id,
+      role: user.role?.name || ''
+    };
+
     next();
-  });
+  } catch (error) {
+    return res.status(401).json({ message: 'Token inválido' });
+  }
 }
