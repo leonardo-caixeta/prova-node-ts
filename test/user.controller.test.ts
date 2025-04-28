@@ -9,7 +9,7 @@ describe('User Controller', () => {
   beforeAll(async () => {
     const response = await request(app).get('/user/login').send({
       email: 'crocodillo@example.com',
-      password: '123456'
+      password: 'secret'
     });
     expect(response.status).toBe(200);
     token = response.body.message;
@@ -23,7 +23,7 @@ describe('User Controller', () => {
         name: 'Test User',
         email: randomEmail,
         password: '123456',
-        cargo: 'Gerente'
+        cargo: 'Admin'
       });
 
     expect(response.status).toBe(201);

@@ -1,8 +1,10 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function main() {
+  const hashedPassword = await bcrypt.hash('secret', 10);
   const adminRole = await prisma.role.create({
     data: {
       name: 'Admin'
@@ -15,26 +17,50 @@ async function main() {
     }
   });
 
-  console.log(`Created roles: ${adminRole.name}, ${userRole.name}`);
+  const masterRole = await prisma.role.create({
+    data: {
+      name: 'Master'
+    }
+  });
+
+  console.log(
+    `Created roles: ${adminRole.name}, ${userRole.name}, ${masterRole.name}`
+  );
 
   const user1 = await prisma.user.create({
     data: {
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      password: '12345',
+      name: 'Bombardillo',
+      email: 'crocodillo@example.com',
+      password: hashedPassword,
       cargoId: userRole.id
     }
   });
 
   const user2 = await prisma.user.create({
     data: {
-      name: 'Jane Doe',
-      email: 'jane.doe@example.com',
-      password: '12345',
+      name: 'tralalero',
+      email: 'tralala@example.com',
+      password: hashedPassword,
       cargoId: adminRole.id
     }
   });
-  console.log(`Created users: ${user1.name}, ${user2.name}`);
+  const user3 = await prisma.user.create({
+    data: {
+      name: 'tungtungtung',
+      email: 'sahur@example.com',
+      password: hashedPassword,
+      cargoId: adminRole.id
+    }
+  });
+  const user4 = await prisma.user.create({
+    data: {
+      name: 'brrbrr Patapim',
+      email: 'patapim@example.com',
+      password: hashedPassword,
+      cargoId: masterRole.id
+    }
+  });
+  console.log(`Created users`);
 }
 
 // Chama a função principal
