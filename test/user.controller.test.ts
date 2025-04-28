@@ -15,7 +15,7 @@ describe('User Controller', () => {
     token = response.body.message;
   });
 
-  it('deve criar um novo usuário', async () => {
+  it('should create new user', async () => {
     const response = await request(app)
       .post('/user')
       .set('Authorization', `Bearer ${token}`)
@@ -35,7 +35,7 @@ describe('User Controller', () => {
     userId = toGetid.body.message.id;
   });
 
-  it('deve buscar todos os usuários', async () => {
+  it('should list all users', async () => {
     const response = await request(app)
       .get('/user')
       .set('Authorization', `Bearer ${token}`);
@@ -44,7 +44,7 @@ describe('User Controller', () => {
     expect(Array.isArray(response.body.message)).toBe(true);
   });
 
-  it('deve buscar um usuário por ID', async () => {
+  it('shoul list one user by ID', async () => {
     const response = await request(app)
       .get(`/user/${userId}`)
       .set('Authorization', `Bearer ${token}`);
@@ -53,7 +53,16 @@ describe('User Controller', () => {
     expect(response.body.message).toHaveProperty('email');
   });
 
-  it('deve atualizar um usuário', async () => {
+  it('shoul list one user by email', async () => {
+    const response = await request(app)
+      .get(`/user/byEmail/${randomEmail}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toHaveProperty('name');
+  });
+
+  it('should update a user', async () => {
     const response = await request(app)
       .patch(`/user/${userId}`)
       .set('Authorization', `Bearer ${token}`)
@@ -67,7 +76,7 @@ describe('User Controller', () => {
     expect(response.body.message).toContain('updated');
   });
 
-  it('deve deletar um usuário', async () => {
+  it('should delete a user', async () => {
     const response = await request(app)
       .delete(`/user/${userId}`)
       .set('Authorization', `Bearer ${token}`);
