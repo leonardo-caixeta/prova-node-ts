@@ -21,6 +21,7 @@ export interface IUserService {
   login(data: IUserLogin): Promise<ServiceResponse<string> | ValidationResult>;
   getAll(): Promise<ServiceResponse<GetUser[] | string>>;
   getById(id: number): Promise<ServiceResponse<GetUser | string>>;
+  getByEmail(email: string): Promise<ServiceResponse<GetUser | string>>;
   create(
     data: IUserCreate
   ): Promise<ServiceResponse<string> | ValidationResult>;

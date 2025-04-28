@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get('/', role.get as any);
 router.get('/:id', role.getById as any);
+router.get('/byName/:name', role.getByName as any);
 router.post('/', role.create as any);
 router.patch('/:id', role.update as any);
 router.delete('/:id', role.roleDelete as any);

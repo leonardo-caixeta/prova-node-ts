@@ -47,6 +47,14 @@ export class UserService implements IUserService {
 
     return { status: 'SUCCESSFUL', message: unicUser };
   }
+  async getByEmail(email: string): Promise<ServiceResponse<GetUser | string>> {
+    if (!email) return { status: 'INVALID_DATA', message: 'Email is required' }
+
+    const unicUser = await prisma.user.findUnique({ where: { email } });
+    if (!unicUser) return { status: 'NOT_FOUND', message: `User with email: ${email} not found` }
+  
+    return { status: 'SUCCESSFUL', message: unicUser }
+  }
   async create(
     data: IUserCreate
   ): Promise<ServiceResponse<string> | ValidationResult> {
@@ -75,7 +83,7 @@ export class UserService implements IUserService {
       }
     });
     if (!created)
-      return { status: 'CONFLICT', message: `user ${name} not created` };
+      return { status: 'CONFLICT', message: `User ${name} not created` };
 
     return { status: 'CREATED', message: `User ${name} created` };
   }

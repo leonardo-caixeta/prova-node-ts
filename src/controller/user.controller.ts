@@ -52,6 +52,18 @@ export async function getById(req: Request, res: Response): Promise<Response> {
   }
 }
 
+export async function getByEmail(req: Request, res: Response): Promise<Response> {
+  try {
+    const { status, message } = await userService.getByEmail(req.params.email);
+    return res.status(mapStatusHTTP(status)).json({ message })
+  } catch (error) {
+    return res
+      .status(mapStatusHTTP('INTERNAL_ERROR'))
+      .json({ message: 'Internal error' });
+  } 
+  }
+  
+
 export async function create(req: Request, res: Response): Promise<Response> {
   try {
     const { status, message } = (await userService.create(req.body)) as {

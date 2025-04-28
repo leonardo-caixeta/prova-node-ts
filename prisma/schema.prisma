@@ -19,5 +19,5 @@ model User {
   email    String @unique
   password String
   cargoId  Int
-  role     Role   @relation(fields: [cargoId], references: [id])
+  role     Role   @relation(fields: [cargoId], references: [id], onDelete: Cascade)
 }
