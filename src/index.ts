@@ -11,7 +11,7 @@ app.use('/user', userRoutes);
 app.use('/role', router);
 
 const PORT = process.env.PORT || 3000;
-if (require.main === module) {  
+if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });

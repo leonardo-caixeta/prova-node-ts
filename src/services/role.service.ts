@@ -91,7 +91,7 @@ export class RoleService implements IRoleService {
   }
 
   async deleteRole(id: number): Promise<ServiceResponse<string | GetRole>> {
-    if (!id) return { status: 'REQUIRED_DATA', message: 'Id is required' }
+    if (!id) return { status: 'REQUIRED_DATA', message: 'Id is required' };
     const unicRole = await prisma.role.findUnique({ where: { id } });
     if (!unicRole)
       return {
@@ -99,7 +99,7 @@ export class RoleService implements IRoleService {
         message: `Role with id: ${id} not found`
       };
 
-    await prisma.role.delete({ where: { id } }, );
+    await prisma.role.delete({ where: { id } });
 
     return {
       status: 'SUCCESSFUL',

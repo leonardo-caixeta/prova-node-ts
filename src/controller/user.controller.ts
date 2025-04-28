@@ -4,10 +4,7 @@ import { mapStatusHTTP } from '../utils/mapStatusHTTP';
 
 const userService = new UserService();
 
-export async function login(
-  req: Request,
-  res: Response
-): Promise<Response> {
+export async function login(req: Request, res: Response): Promise<Response> {
   try {
     const { status, message } = (await userService.login(req.body)) as {
       status: string;
@@ -52,17 +49,19 @@ export async function getById(req: Request, res: Response): Promise<Response> {
   }
 }
 
-export async function getByEmail(req: Request, res: Response): Promise<Response> {
+export async function getByEmail(
+  req: Request,
+  res: Response
+): Promise<Response> {
   try {
     const { status, message } = await userService.getByEmail(req.params.email);
-    return res.status(mapStatusHTTP(status)).json({ message })
+    return res.status(mapStatusHTTP(status)).json({ message });
   } catch (error) {
     return res
       .status(mapStatusHTTP('INTERNAL_ERROR'))
       .json({ message: 'Internal error' });
-  } 
   }
-  
+}
 
 export async function create(req: Request, res: Response): Promise<Response> {
   try {
@@ -90,7 +89,7 @@ export async function update(req: Request, res: Response): Promise<Response> {
     return res.status(mapStatusHTTP(status)).json({ message });
   } catch (error) {
     console.log(error);
-    
+
     return res
       .status(mapStatusHTTP('INTERNAL_ERROR'))
       .json({ message: 'Internal error' });

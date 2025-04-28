@@ -34,7 +34,7 @@ export class UserService implements IUserService {
   }
 
   async getAll(): Promise<ServiceResponse<GetUser[] | string>> {
-    const users = await prisma.user.findMany({include: { role: true }});
+    const users = await prisma.user.findMany({ include: { role: true } });
     if (!users) return { status: 'NOT_FOUND', message: 'No users found' };
 
     return { status: 'SUCCESSFUL', message: users };
@@ -48,12 +48,16 @@ export class UserService implements IUserService {
     return { status: 'SUCCESSFUL', message: unicUser };
   }
   async getByEmail(email: string): Promise<ServiceResponse<GetUser | string>> {
-    if (!email) return { status: 'INVALID_DATA', message: 'Email is required' }
+    if (!email) return { status: 'INVALID_DATA', message: 'Email is required' };
 
     const unicUser = await prisma.user.findUnique({ where: { email } });
-    if (!unicUser) return { status: 'NOT_FOUND', message: `User with email: ${email} not found` }
-  
-    return { status: 'SUCCESSFUL', message: unicUser }
+    if (!unicUser)
+      return {
+        status: 'NOT_FOUND',
+        message: `User with email: ${email} not found`
+      };
+
+    return { status: 'SUCCESSFUL', message: unicUser };
   }
   async create(
     data: IUserCreate

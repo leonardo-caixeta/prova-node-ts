@@ -5,7 +5,7 @@ import { mapStatusHTTP } from '../utils/mapStatusHTTP';
 type Return = {
   status: string;
   message: any;
-}
+};
 
 const roleService = new RoleService();
 export async function get(req: Request, res: Response): Promise<Response> {
@@ -19,10 +19,13 @@ export async function get(req: Request, res: Response): Promise<Response> {
   }
 }
 
-export async function getByName(req: Request, res: Response): Promise<Response> {
+export async function getByName(
+  req: Request,
+  res: Response
+): Promise<Response> {
   try {
     const { status, message } = await roleService.getByName(req.params.name);
-    
+
     return res.status(mapStatusHTTP(status)).json({ message });
   } catch (error) {
     return res
@@ -57,7 +60,9 @@ export async function getById(req: Request, res: Response): Promise<Response> {
 
 export async function update(req: Request, res: Response): Promise<Response> {
   try {
-    const { status, message } = (await roleService.update(req as any)) as Return;
+    const { status, message } = (await roleService.update(
+      req as any
+    )) as Return;
     return res.status(mapStatusHTTP(status)).json({ message });
   } catch (error) {
     return res
