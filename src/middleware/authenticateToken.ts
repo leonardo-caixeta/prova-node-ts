@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 
-export function authenticateToken(
+export async function authenticateToken(
   req: Request,
   res: Response,
   next: NextFunction
@@ -18,12 +18,15 @@ export function authenticateToken(
 
   try {
     const jwtSecret = process.env.JWT_SECRET as string;
-    const decoded = jwt.verify(token, jwtSecret) as { id: number };
+    jwt.verify(token, jwtSecret) as { id: number };
 
-    const user = prisma.user.findUnique({
+    /*
+    const user = await prisma.user.findUnique({
       where: { id: decoded.id },
       include: { role: true }
     });
+    console.log(user);
+
     if (!user) {
       return res.status(401).json({ message: 'User not found' });
     }
@@ -32,7 +35,7 @@ export function authenticateToken(
       id: decoded.id,
       role: user.role?.name || ''
     };
-
+    */
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Token inválido' });
