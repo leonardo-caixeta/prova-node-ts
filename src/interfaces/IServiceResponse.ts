@@ -1,4 +1,5 @@
 import { ValidationResult } from '../types';
+import { IUserUpdateRequest } from '../types/Request';
 import { GetRole } from '../types/Role';
 import { ServiceResponse } from '../types/ServiceResponse';
 import { GetUser, IUserCreate, IUserLogin, IUserUpdate } from '../types/User';
@@ -25,9 +26,22 @@ export interface IUserService {
   create(
     data: IUserCreate
   ): Promise<ServiceResponse<string> | ValidationResult>;
+  update(
+    req: IUserUpdateRequest
+  ): Promise<ServiceResponse<string> | ValidationResult>;
+  deleteUser(id: number): Promise<ServiceResponse<string | GetUser>>;
+}
+
+export interface IBilletService {
+  getAll(): Promise<ServiceResponse<TBillet[] | string>>;
+  getById(id: number): Promise<ServiceResponse<TBillet | string>>;
+  getByUserId(id: number): Promise<ServiceResponse<TBillet | string>>;
+  create(
+    data: IBilletCreate
+  ): Promise<ServiceResponse<string> | ValidationResult>;
   update(req: {
-    body: IUserUpdate;
+    body: IBilletUpdate;
     params: { id: number };
   }): Promise<ServiceResponse<string> | ValidationResult>;
-  deleteUser(id: number): Promise<ServiceResponse<string | GetUser>>;
+  deleteBillet(id: number): Promise<ServiceResponse<string | TBillet>>;
 }

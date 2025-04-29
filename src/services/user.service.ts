@@ -10,6 +10,7 @@ import {
 } from '../utils/validators';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { IUserUpdateRequest } from '../types/Request';
 
 const prisma = new PrismaClient();
 
@@ -95,10 +96,9 @@ export class UserService implements IUserService {
 
     return { status: 'CREATED', message: `User ${name} created` };
   }
-  async update(req: {
-    body: IUserUpdate;
-    params: { id: number };
-  }): Promise<ServiceResponse<string> | ValidationResult> {
+  async update(
+    req: IUserUpdateRequest
+  ): Promise<ServiceResponse<string> | ValidationResult> {
     const { name, email, password } = req.body;
     const id = Number(req.params.id);
 
