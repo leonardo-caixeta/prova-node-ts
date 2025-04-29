@@ -8,7 +8,7 @@ describe('User Controller', () => {
 
   beforeAll(async () => {
     const response = await request(app).get('/user/login').send({
-      email: 'crocodillo@example.com',
+      email: 'patapim@example.com', // User with role: Master
       password: 'secret'
     });
     expect(response.status).toBe(200);

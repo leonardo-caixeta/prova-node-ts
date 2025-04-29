@@ -29,7 +29,11 @@ export class UserService implements IUserService {
       return { status: 'INVALID_DATA', message: 'Invalid password' };
 
     const secret = process.env.JWT_SECRET as string;
-    const token = jwt.sign({ id: userData.id }, secret, { expiresIn: '2d' });
+    const token = jwt.sign(
+      { id: userData.id, role: userData.cargoId },
+      secret,
+      { expiresIn: '2d' }
+    );
     return { status: 'SUCCESSFUL', message: token };
   }
 

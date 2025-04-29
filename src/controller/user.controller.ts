@@ -88,8 +88,6 @@ export async function update(req: Request, res: Response): Promise<Response> {
 
     return res.status(mapStatusHTTP(status)).json({ message });
   } catch (error) {
-    console.log(error);
-
     return res
       .status(mapStatusHTTP('INTERNAL_ERROR'))
       .json({ message: 'Internal error' });
