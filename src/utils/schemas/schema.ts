@@ -12,13 +12,15 @@ export const loginValidation = Joi.object({
 
 export const updateValidation = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().min(5),
-  name: Joi.string().required()
+  password: Joi.string().min(4),
+  name: Joi.string().required(),
+  id: Joi.number().required()
 }).messages({
   'any.required': 'All fields must be filled',
   'string.empty': 'All fields must be filled',
   'string.min': 'Invalid email or password',
-  'string.email': 'Invalid email or password'
+  'string.email': 'Invalid email or password',
+  'number.required': 'Id is required'
 });
 
 export const createValidation = Joi.object({
