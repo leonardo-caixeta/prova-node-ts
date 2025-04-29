@@ -30,8 +30,7 @@ src/
 ├── utils/\
 ├── index.ts\
 test/\
-prisma/\
-.env
+prisma/
 
 ---
 
@@ -90,11 +89,32 @@ cd prova-node_ts-leo
 
 ---
 
-### 1. Iniciar o projeto
+### 2. Iniciar o projeto
 
 ```bash
 npm install
 npx prisma migrate dev --name init
 npm run seed
 npm run dev
+```
+
+---
+
+### 3. Rodar os testes
+
+```bash
+npm run test
+npm run test --detectOpenHandles # Detectar problemas pendentes
+```
+
+---
+
+### 4. Configurar o .env
+
+```bash
+## Exemplo de .env
+
+DATABASE_URL="postgresql://<user>:<password>@localhost:5432/<DB_name>"
+JWT_SECRET="<your_key>"
+PORT=3000 ## Default
 ```
