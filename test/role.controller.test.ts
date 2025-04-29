@@ -2,8 +2,18 @@ import request from 'supertest';
 import app from '../src/index';
 
 describe('Role Controller', () => {
+  let token: string;
   let roleId: number;
   const randomRoleName = `Supervisor_${Date.now()}`;
+
+  beforeAll(async () => {
+    const response = await request(app).get('/user/login').send({
+      email: 'patapim@example.com', // User with role: Master
+      password: 'secret'
+    });
+    expect(response.status).toBe(200);
+    token = response.body.message;
+  });
 
   it('should create new role', async () => {
     const response = await request(app).post('/role').send({
@@ -38,16 +48,21 @@ describe('Role Controller', () => {
   });
 
   it('should update role name', async () => {
-    const response = await request(app).patch(`/role/${roleId}`).send({
-      name: 'Supervisor Atualizado'
-    });
+    const response = await request(app)
+      .patch(`/role/${roleId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'Supervisor Atualizado'
+      });
 
     expect(response.status).toBe(200);
     expect(response.body.message).toMatch('Role name updated to');
   });
 
   it('should delete a role', async () => {
-    const response = await request(app).delete(`/role/${roleId}`);
+    const response = await request(app)
+      .delete(`/role/${roleId}`)
+      .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toContain(`Role with id: ${roleId} was deleted`);
