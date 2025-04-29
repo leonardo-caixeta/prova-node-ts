@@ -29,16 +29,16 @@ export class UserService implements IUserService {
       return { status: 'INVALID_DATA', message: 'Invalid password' };
 
     const secret = process.env.JWT_SECRET as string;
-    const token = jwt.sign(
-      { id: userData.id, role: userData.cargoId },
-      secret,
-      { expiresIn: '2d' }
-    );
+    const token = jwt.sign({ id: userData.id, role: userData.roleId }, secret, {
+      expiresIn: '2d'
+    });
     return { status: 'SUCCESSFUL', message: token };
   }
 
   async getAll(): Promise<ServiceResponse<GetUser[] | string>> {
-    const users = await prisma.user.findMany({ include: { role: true } });
+    const users = await prisma.user.findMany({
+      include: { role: true, billet: true }
+    });
     if (!users) return { status: 'NOT_FOUND', message: 'No users found' };
 
     return { status: 'SUCCESSFUL', message: users };
@@ -87,7 +87,7 @@ export class UserService implements IUserService {
         name,
         email,
         password: hashedPassword,
-        cargoId: roleExists.id as any
+        roleId: roleExists.id as any
       }
     });
     if (!created)

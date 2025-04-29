@@ -18,6 +18,17 @@ model User {
   name     String
   email    String @unique
   password String
-  cargoId  Int
-  role     Role   @relation(fields: [cargoId], references: [id], onDelete: Cascade)
+  roleId  Int
+  role     Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  billet   Billet[]
+}
+
+model Billet {
+  id          Int       @id @default(autoincrement())
+  valueToPay  Float
+  status      String    @default("PENDING")
+  payDay      DateTime 
+  dayUserPaid DateTime?
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
