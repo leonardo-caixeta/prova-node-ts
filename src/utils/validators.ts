@@ -1,19 +1,19 @@
+import { IBilletCreate, IBilletUpdate } from '../interfaces/IBillet';
+import { IUserCreate, IUserLogin, IUserUpdate } from '../interfaces/IUser';
+import { ValidationResult } from '../types';
 import {
   loginValidation,
-  updateValidation,
-  createValidation,
-  createRoleValidation
+  updateUserValidation,
+  createUserValidation,
+  createRoleValidation,
+  createBilletValidation,
+  updateBilletValidation
 } from './schemas/schema';
-
-type ValidationResult = { status: string; message: string | undefined } | null;
 
 export const validateLogin = ({
   email,
   password
-}: {
-  email: string;
-  password: string;
-}): ValidationResult => {
+}: IUserLogin): ValidationResult => {
   const validation = loginValidation.validate({ email, password });
 
   const typeError = validation.error?.details[0].type;
@@ -28,13 +28,8 @@ export const validateLogin = ({
   return { status: 'INVALID_DATA', message };
 };
 
-export const validateCreate = (data: {
-  name: string;
-  email: string;
-  password: string;
-  cargo: string;
-}): ValidationResult => {
-  const validation = createValidation.validate(data);
+export const validateUserCreate = (data: IUserCreate): ValidationResult => {
+  const validation = createUserValidation.validate(data);
   const typeError = validation.error?.details[0].type;
   const message =
     validation.error?.details[0].message || validation.error?.message;
@@ -47,15 +42,11 @@ export const validateCreate = (data: {
   return { status: 'INVALID_DATA', message };
 };
 
-export const validateUpdate = (
-  data: {
-    name: string;
-    email: string;
-    password?: string;
-  },
+export const validateUserUpdate = (
+  data: IUserUpdate,
   id: number
 ): ValidationResult => {
-  const validation = updateValidation.validate({ ...data, id });
+  const validation = updateUserValidation.validate({ ...data, id });
 
   const typeError = validation.error?.details[0].type;
   const message =
@@ -71,6 +62,35 @@ export const validateUpdate = (
 
 export const validateRole = (data: { name: string }): ValidationResult => {
   const validation = createRoleValidation.validate(data);
+  const typeError = validation.error?.details[0].type;
+  const message =
+    validation.error?.details[0].message || validation.error?.message;
+
+  if (!validation.error) return null;
+
+  if (typeError === 'any.required' || typeError === 'string.empty') {
+    return { status: 'REQUIRED_DATA', message };
+  }
+  return { status: 'INVALID_DATA', message };
+};
+
+export const validateCreateBillet = (data: IBilletCreate): ValidationResult => {
+  const validation = createBilletValidation.validate(data);
+  const typeError = validation.error?.details[0].type;
+  const message =
+    validation.error?.details[0].message || validation.error?.message;
+
+  if (!validation.error) return null;
+
+  if (typeError === 'any.required' || typeError === 'string.empty') {
+    return { status: 'REQUIRED_DATA', message };
+  }
+  return { status: 'INVALID_DATA', message };
+};
+
+export const validateUpdateBillet = (data: IBilletUpdate): ValidationResult => {
+  const validation = updateBilletValidation.validate(data);
+
   const typeError = validation.error?.details[0].type;
   const message =
     validation.error?.details[0].message || validation.error?.message;

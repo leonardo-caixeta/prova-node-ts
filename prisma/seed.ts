@@ -32,7 +32,7 @@ async function main() {
       name: 'Bombardillo',
       email: 'crocodillo@example.com',
       password: hashedPassword,
-      cargoId: userRole.id
+      roleId: userRole.id
     }
   });
 
@@ -41,7 +41,7 @@ async function main() {
       name: 'tralalero',
       email: 'tralala@example.com',
       password: hashedPassword,
-      cargoId: adminRole.id
+      roleId: adminRole.id
     }
   });
   const user3 = await prisma.user.create({
@@ -49,7 +49,7 @@ async function main() {
       name: 'tungtungtung',
       email: 'sahur@example.com',
       password: hashedPassword,
-      cargoId: adminRole.id
+      roleId: adminRole.id
     }
   });
   const user4 = await prisma.user.create({
@@ -57,10 +57,22 @@ async function main() {
       name: 'brrbrr Patapim',
       email: 'patapim@example.com',
       password: hashedPassword,
-      cargoId: masterRole.id
+      roleId: masterRole.id
     }
   });
-  console.log(`Created users`);
+  console.log(
+    `Created users ${user1.name}, ${user2.name}, ${user3.name}, ${user4.name}`
+  );
+
+  const billet1 = await prisma.billet.create({
+    data: {
+      valueToPay: 10000,
+      payDay: new Date('2025-09-07T00:00:00Z'),
+      userId: user1.id
+    }
+  });
+
+  console.log(`Created billet: ${billet1.valueToPay}`);
 }
 
 // Chama a função principal

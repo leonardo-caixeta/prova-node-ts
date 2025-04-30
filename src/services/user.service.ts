@@ -2,14 +2,20 @@ import { PrismaClient } from '@prisma/client';
 import { IUserService } from '../interfaces/IServiceResponse';
 import { ValidationResult } from '../types';
 import { ServiceResponse } from '../types/ServiceResponse';
-import { GetUser, IUserCreate, IUserLogin, IUserUpdate } from '../types/User';
 import {
-  validateCreate,
+  GetUser,
+  IUserCreate,
+  IUserLogin,
+  IUserUpdate
+} from '../interfaces/IUser';
+import {
+  validateUserCreate,
   validateLogin,
-  validateUpdate
+  validateUserUpdate
 } from '../utils/validators';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { IUserUpdateRequest } from '../interfaces/Request';
 
 const prisma = new PrismaClient();
 
@@ -29,23 +35,24 @@ export class UserService implements IUserService {
       return { status: 'INVALID_DATA', message: 'Invalid password' };
 
     const secret = process.env.JWT_SECRET as string;
-    const token = jwt.sign(
-      { id: userData.id, role: userData.cargoId },
-      secret,
-      { expiresIn: '2d' }
-    );
+    const token = jwt.sign({ id: userData.id, role: userData.roleId }, secret, {
+      expiresIn: '2d'
+    });
     return { status: 'SUCCESSFUL', message: token };
   }
 
   async getAll(): Promise<ServiceResponse<GetUser[] | string>> {
-    const users = await prisma.user.findMany({ include: { role: true } });
+    const users = await prisma.user.findMany({
+      include: { role: true, billet: true }
+    });
     if (!users) return { status: 'NOT_FOUND', message: 'No users found' };
 
     return { status: 'SUCCESSFUL', message: users };
   }
-  async getById(id: number): Promise<ServiceResponse<GetUser | string>> {
+  async getById(id: string): Promise<ServiceResponse<GetUser | string>> {
     if (!id) return { status: 'INVALID_DATA', message: 'Id is required' };
-    const unicUser = await prisma.user.findUnique({ where: { id } });
+    const ID = parseInt(id, 10);
+    const unicUser = await prisma.user.findUnique({ where: { id: ID } });
     if (!unicUser)
       return { status: 'NOT_FOUND', message: `User with id: ${id} not found` };
 
@@ -67,7 +74,7 @@ export class UserService implements IUserService {
     data: IUserCreate
   ): Promise<ServiceResponse<string> | ValidationResult> {
     const { name, email, password, cargo } = data;
-    const validation = validateCreate(data);
+    const validation = validateUserCreate(data);
     if (validation) return validation;
 
     const roleExists = await prisma.role.findFirst({ where: { name: cargo } });
@@ -87,7 +94,7 @@ export class UserService implements IUserService {
         name,
         email,
         password: hashedPassword,
-        cargoId: roleExists.id as any
+        roleId: roleExists.id as any
       }
     });
     if (!created)
@@ -95,14 +102,13 @@ export class UserService implements IUserService {
 
     return { status: 'CREATED', message: `User ${name} created` };
   }
-  async update(req: {
-    body: IUserUpdate;
-    params: { id: number };
-  }): Promise<ServiceResponse<string> | ValidationResult> {
+  async update(
+    req: IUserUpdateRequest
+  ): Promise<ServiceResponse<string> | ValidationResult> {
     const { name, email, password } = req.body;
-    const id = Number(req.params.id);
+    const id = parseInt(req.params.id, 10);
 
-    const validation = validateUpdate(req.body, id);
+    const validation = validateUserUpdate(req.body, id);
     if (validation) return validation;
 
     let dataToUpdate: IUserUpdate = { email, name };
@@ -121,12 +127,13 @@ export class UserService implements IUserService {
       message: `User ${name} with id: ${id} was updated`
     };
   }
-  async deleteUser(id: number): Promise<ServiceResponse<string | GetUser>> {
+  async deleteUser(id: string): Promise<ServiceResponse<string | GetUser>> {
     if (!id) return { status: 'INVALID_DATA', message: 'Id is required' };
     const unicUser = await this.getById(id);
+    const ID = parseInt(id, 10);
     if (unicUser.status === 'NOT_FOUND') return unicUser;
 
-    await prisma.user.delete({ where: { id } });
+    await prisma.user.delete({ where: { id: ID } });
     return { status: 'SUCCESSFUL', message: `User with id: ${id} was deleted` };
   }
 }

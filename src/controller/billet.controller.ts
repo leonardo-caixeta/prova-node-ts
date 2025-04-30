@@ -1,30 +1,15 @@
 import { Request, Response } from 'express';
-import { UserService } from '../services/user.service';
-import { mapStatusHTTP } from '../utils/mapStatusHTTP';
+import { BilletService } from '../services/billet.service';
 import { Return } from '../types';
+import { mapStatusHTTP } from '../utils/mapStatusHTTP';
 
-const userService = new UserService();
-
-export async function login(req: Request, res: Response): Promise<Response> {
-  try {
-    const { status, message } = (await userService.login(req.body)) as Return;
-
-    return res.status(mapStatusHTTP(status)).json(message);
-  } catch (error) {
-    console.error(error);
-    return res
-      .status(mapStatusHTTP('INTERNAL_ERROR'))
-      .json({ message: 'Internal error' });
-  }
-}
+const billetService = new BilletService();
 
 export async function get(req: Request, res: Response): Promise<Response> {
   try {
-    const { status, message } = (await userService.getAll()) as Return;
-
+    const { status, message } = (await billetService.getAll()) as Return;
     return res.status(mapStatusHTTP(status)).json(message);
   } catch (error) {
-    console.error(error);
     return res
       .status(mapStatusHTTP('INTERNAL_ERROR'))
       .json({ message: 'Internal error' });
@@ -34,7 +19,23 @@ export async function get(req: Request, res: Response): Promise<Response> {
 export async function getById(req: Request, res: Response): Promise<Response> {
   try {
     const { id } = req.params;
-    const { status, message } = await userService.getById(id);
+    const { status, message } = await billetService.getById(id);
+    return res.status(mapStatusHTTP(status)).json(message);
+  } catch (error) {
+    return res
+      .status(mapStatusHTTP('INTERNAL_ERROR'))
+      .json({ message: 'Internal error' });
+  }
+}
+
+export async function getByUserId(
+  req: Request,
+  res: Response
+): Promise<Response> {
+  try {
+    const { status, message } = await billetService.getByUserId(
+      req.params.userId
+    );
 
     return res.status(mapStatusHTTP(status)).json(message);
   } catch (error) {
@@ -44,12 +45,15 @@ export async function getById(req: Request, res: Response): Promise<Response> {
   }
 }
 
-export async function getByEmail(
+export async function getDebtByUserId(
   req: Request,
   res: Response
 ): Promise<Response> {
   try {
-    const { status, message } = await userService.getByEmail(req.params.email);
+    const { status, message } = await billetService.getDebtByUserId(
+      req.params.userId
+    );
+
     return res.status(mapStatusHTTP(status)).json(message);
   } catch (error) {
     return res
@@ -60,8 +64,9 @@ export async function getByEmail(
 
 export async function create(req: Request, res: Response): Promise<Response> {
   try {
-    const { status, message } = (await userService.create(req.body)) as Return;
-
+    const { status, message } = (await billetService.create(
+      req.body
+    )) as Return;
     return res.status(mapStatusHTTP(status)).json(message);
   } catch (error) {
     console.error(error);
@@ -73,10 +78,9 @@ export async function create(req: Request, res: Response): Promise<Response> {
 
 export async function update(req: Request, res: Response): Promise<Response> {
   try {
-    const { status, message } = (await userService.update(
+    const { status, message } = (await billetService.update(
       req as any
     )) as Return;
-
     return res.status(mapStatusHTTP(status)).json(message);
   } catch (error) {
     return res
@@ -85,14 +89,13 @@ export async function update(req: Request, res: Response): Promise<Response> {
   }
 }
 
-export async function userDelete(
+export async function billetDelete(
   req: Request,
   res: Response
 ): Promise<Response> {
   try {
     const { id } = req.params;
-    const { status, message } = await userService.deleteUser(id);
-
+    const { status, message } = await billetService.deleteBillet(id);
     return res.status(mapStatusHTTP(status)).json(message);
   } catch (error) {
     console.error(error);
@@ -101,5 +104,3 @@ export async function userDelete(
       .json({ message: 'Internal error' });
   }
 }
-
-export default { get, getById, getByEmail, create, update, userDelete, login };

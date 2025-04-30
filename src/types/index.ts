@@ -3,6 +3,7 @@ export type ValidationResult = {
   message: string | undefined;
 } | null;
 
-export interface RoleDTO {
-  name: string;
-}
+export type Return = {
+  status: string;
+  message: any;
+};

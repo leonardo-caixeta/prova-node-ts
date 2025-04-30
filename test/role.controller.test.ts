@@ -12,7 +12,7 @@ describe('Role Controller', () => {
       password: 'secret'
     });
     expect(response.status).toBe(200);
-    token = response.body.message;
+    token = response.body;
   });
 
   it('should create new role', async () => {
@@ -21,30 +21,30 @@ describe('Role Controller', () => {
     });
 
     expect(response.status).toBe(201);
-    expect(response.body.message).toMatch('created');
+    expect(response.body).toMatch('created');
     const toGetid = await request(app).get(`/role/byName/${randomRoleName}`);
-    roleId = toGetid.body.message.id;
+    roleId = toGetid.body.id;
   });
 
   it('should list all roles', async () => {
     const response = await request(app).get('/role');
 
     expect(response.status).toBe(200);
-    expect(Array.isArray(response.body.message)).toBe(true);
+    expect(Array.isArray(response.body)).toBe(true);
   });
 
   it('should list one role by id', async () => {
     const response = await request(app).get(`/role/${roleId}`);
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toHaveProperty('id');
+    expect(response.body).toHaveProperty('id');
   });
 
   it('should list one role by name', async () => {
     const response = await request(app).get(`/role/byName/${randomRoleName}`);
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toHaveProperty('name');
+    expect(response.body).toHaveProperty('name');
   });
 
   it('should update role name', async () => {
@@ -56,7 +56,7 @@ describe('Role Controller', () => {
       });
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toMatch('Role name updated to');
+    expect(response.body).toMatch('Role name updated to');
   });
 
   it('should delete a role', async () => {
