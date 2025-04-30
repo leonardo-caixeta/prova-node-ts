@@ -1,3 +1,11 @@
+export interface IBilletDTO {
+  valueToPay: number;
+  status: string;
+  payDay: Date;
+  dayUserPaid: Date | null;
+  userId: number;
+}
+
 export interface IBilletCreate {
   valueToPay: number;
   payDay: Date;
@@ -11,11 +19,6 @@ export interface IBilletUpdate {
   dayUserPaid?: Date | null;
 }
 
-export interface IBillet {
+export interface GetBillet extends IBilletDTO {
   id: number;
-  valueToPay: number;
-  status: string;
-  payDay: Date;
-  dayUserPaid: Date | null;
-  userId: number;
 }

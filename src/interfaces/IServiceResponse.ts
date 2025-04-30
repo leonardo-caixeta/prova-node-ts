@@ -2,12 +2,8 @@ import { ValidationResult } from '../types';
 import { IBilletUpdateRequest, IUserUpdateRequest } from './Request';
 import { GetRole, IRoleCreate, IRoleUpdate } from './IRole';
 import { ServiceResponse } from '../types/ServiceResponse';
-import {
-  GetUser,
-  IUserCreate,
-  IUserLogin,
-  IUserUpdate
-} from '../interfaces/IUser';
+import { GetUser, IUserCreate, IUserLogin } from '../interfaces/IUser';
+import { IBilletCreate } from './IBillet';
 
 export interface IRoleService {
   getAll(): Promise<ServiceResponse<GetRole[]> | string>;

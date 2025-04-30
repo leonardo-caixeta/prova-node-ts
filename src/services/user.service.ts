@@ -9,9 +9,9 @@ import {
   IUserUpdate
 } from '../interfaces/IUser';
 import {
-  validateCreate,
+  validateUserCreate,
   validateLogin,
-  validateUpdate
+  validateUserUpdate
 } from '../utils/validators';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -74,7 +74,7 @@ export class UserService implements IUserService {
     data: IUserCreate
   ): Promise<ServiceResponse<string> | ValidationResult> {
     const { name, email, password, cargo } = data;
-    const validation = validateCreate(data);
+    const validation = validateUserCreate(data);
     if (validation) return validation;
 
     const roleExists = await prisma.role.findFirst({ where: { name: cargo } });
@@ -106,9 +106,9 @@ export class UserService implements IUserService {
     req: IUserUpdateRequest
   ): Promise<ServiceResponse<string> | ValidationResult> {
     const { name, email, password } = req.body;
-    const id = Number(req.params.id);
+    const id = parseInt(req.params.id, 10);
 
-    const validation = validateUpdate(req.body, id);
+    const validation = validateUserUpdate(req.body, id);
     if (validation) return validation;
 
     let dataToUpdate: IUserUpdate = { email, name };
