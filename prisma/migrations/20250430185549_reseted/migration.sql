@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "statusBillet" AS ENUM ('PENDING', 'PAID', 'CANCELED', 'EXPIRED');
+
 -- CreateTable
 CREATE TABLE "Role" (
     "id" SERIAL NOT NULL,
@@ -21,7 +24,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Billet" (
     "id" SERIAL NOT NULL,
     "valueToPay" DOUBLE PRECISION NOT NULL,
-    "status" TEXT NOT NULL DEFAULT 'PENDING',
+    "status" "statusBillet" NOT NULL DEFAULT 'PENDING',
     "payDay" TIMESTAMP(3) NOT NULL,
     "dayUserPaid" TIMESTAMP(3),
     "userId" INTEGER NOT NULL,

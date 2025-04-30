@@ -45,6 +45,23 @@ export async function getByUserId(
   }
 }
 
+export async function getDebtByUserId(
+  req: Request,
+  res: Response
+): Promise<Response> {
+  try {
+    const { status, message } = await billetService.getDebtByUserId(
+      req.params.userId
+    );
+
+    return res.status(mapStatusHTTP(status)).json(message);
+  } catch (error) {
+    return res
+      .status(mapStatusHTTP('INTERNAL_ERROR'))
+      .json({ message: 'Internal error' });
+  }
+}
+
 export async function create(req: Request, res: Response): Promise<Response> {
   try {
     const { status, message } = (await billetService.create(

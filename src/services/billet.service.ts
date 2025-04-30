@@ -52,6 +52,32 @@ export class BilletService implements IBilletService {
     return { status: 'SUCCESSFUL', message: unicBillet };
   }
 
+  async getDebtByUserId(userId: string): Promise<ServiceResponse<string>> {
+    if (!userId) return { status: 'INVALID_DATA', message: 'Id is required' };
+
+    const userIdNumber = parseInt(userId, 10);
+    const billets = await prisma.billet.findMany({
+      where: { userId: userIdNumber }
+    });
+
+    if (!billets)
+      return {
+        status: 'NOT_FOUND',
+        message: `Billets from user with id: ${userIdNumber} not found`
+      };
+
+    const toReturn = billets.reduce((acc, curr) => {
+      if (curr.status === 'PAID') acc += 0;
+      else return acc + curr.valueToPay;
+      return acc;
+    }, 0);
+
+    return {
+      status: 'SUCCESSFUL',
+      message: `Total debt from user with id: ${userIdNumber} is $${toReturn}`
+    };
+  }
+
   async create(
     data: IBilletCreate
   ): Promise<ServiceResponse<string> | ValidationResult> {

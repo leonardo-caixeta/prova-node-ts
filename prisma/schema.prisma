@@ -18,17 +18,24 @@ model User {
   name     String
   email    String @unique
   password String
-  roleId  Int
+  roleId   Int
   role     Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
   billet   Billet[]
 }
 
 model Billet {
-  id          Int       @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   valueToPay  Float
-  status      String    @default("PENDING")
+  status      statusBillet  @default(PENDING)
   payDay      DateTime 
   dayUserPaid DateTime?
   userId      Int
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum statusBillet {
+  PENDING
+  PAID
+  CANCELED
+  EXPIRED
 }

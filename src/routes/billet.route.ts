@@ -8,6 +8,7 @@ const router = express.Router();
 router.get('/', billet.get as any);
 router.get('/:id', billet.getById as any);
 router.get('/byUserId/:userId', billet.getByUserId as any);
+router.get('/debt/:userId', billet.getDebtByUserId as any);
 router.post('/', billet.create as any);
 router.patch(
   '/:id',

@@ -28,6 +28,7 @@ describe('Billet Controller', () => {
     expect(response.status).toBe(201);
     expect(response.body).toMatch('created');
   });
+
   it('should list all billets', async () => {
     const response = await request(app).get('/billet');
 
@@ -36,6 +37,7 @@ describe('Billet Controller', () => {
 
     billetId = response.body[0].id;
   });
+
   it('should list a billet by id', async () => {
     const response = await request(app).get(`/billet/${billetId}`);
 
@@ -44,12 +46,14 @@ describe('Billet Controller', () => {
 
     userId = response.body.userId;
   });
+
   it('should list all billets by userId', async () => {
     const response = await request(app).get(`/billet/byUserId/${userId}`);
 
     expect(response.status).toBe(200);
     expect(Array.isArray(response.body)).toBe(true);
   });
+
   it('should update a billet', async () => {
     const response = await request(app)
       .patch(`/billet/${billetId}`)
@@ -61,6 +65,7 @@ describe('Billet Controller', () => {
     expect(response.status).toBe(200);
     expect(response.body).toMatch('updated');
   });
+
   it('should delete a billet', async () => {
     const response = await request(app)
       .delete(`/billet/${billetId}`)

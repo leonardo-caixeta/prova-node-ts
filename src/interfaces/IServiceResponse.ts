@@ -34,6 +34,7 @@ export interface IBilletService {
   getAll(): Promise<ServiceResponse<TBillet[] | string>>;
   getById(id: string): Promise<ServiceResponse<TBillet | string>>;
   getByUserId(userId: string): Promise<ServiceResponse<TBillet[] | string>>;
+  getDebtByUserId(userId: string): Promise<ServiceResponse<string>>;
   create(
     data: IBilletCreate
   ): Promise<ServiceResponse<string> | ValidationResult>;
