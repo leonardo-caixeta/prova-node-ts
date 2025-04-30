@@ -7,7 +7,7 @@ const roleService = new RoleService();
 export async function get(req: Request, res: Response): Promise<Response> {
   try {
     const { status, message } = (await roleService.getAll()) as Return;
-    return res.status(mapStatusHTTP(status)).json({ message });
+    return res.status(mapStatusHTTP(status)).json(message);
   } catch (error) {
     return res
       .status(mapStatusHTTP('INTERNAL_ERROR'))
@@ -19,7 +19,7 @@ export async function getById(req: Request, res: Response): Promise<Response> {
   try {
     const { id } = req.params;
     const { status, message } = await roleService.getById(id);
-    return res.status(mapStatusHTTP(status)).json({ message });
+    return res.status(mapStatusHTTP(status)).json(message);
   } catch (error) {
     return res
       .status(mapStatusHTTP('INTERNAL_ERROR'))
@@ -34,7 +34,7 @@ export async function getByName(
   try {
     const { status, message } = await roleService.getByName(req.params.name);
 
-    return res.status(mapStatusHTTP(status)).json({ message });
+    return res.status(mapStatusHTTP(status)).json(message);
   } catch (error) {
     return res
       .status(mapStatusHTTP('INTERNAL_ERROR'))
@@ -45,7 +45,7 @@ export async function getByName(
 export async function create(req: Request, res: Response): Promise<Response> {
   try {
     const { status, message } = (await roleService.create(req.body)) as Return;
-    return res.status(mapStatusHTTP(status)).json({ message });
+    return res.status(mapStatusHTTP(status)).json(message);
   } catch (error) {
     console.error(error);
     return res
@@ -59,7 +59,7 @@ export async function update(req: Request, res: Response): Promise<Response> {
     const { status, message } = (await roleService.update(
       req as any
     )) as Return;
-    return res.status(mapStatusHTTP(status)).json({ message });
+    return res.status(mapStatusHTTP(status)).json(message);
   } catch (error) {
     return res
       .status(mapStatusHTTP('INTERNAL_ERROR'))

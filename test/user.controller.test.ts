@@ -12,7 +12,7 @@ describe('User Controller', () => {
       password: 'secret'
     });
     expect(response.status).toBe(200);
-    token = response.body.message;
+    token = response.body;
   });
 
   it('should create new user', async () => {
@@ -27,12 +27,12 @@ describe('User Controller', () => {
       });
 
     expect(response.status).toBe(201);
-    expect(response.body.message).toContain('created');
+    expect(response.body).toContain('created');
 
     const toGetid = await request(app)
       .get(`/user/byEmail/${randomEmail}`)
       .set('Authorization', `Bearer ${token}`);
-    userId = toGetid.body.message.id;
+    userId = toGetid.body.id;
   });
 
   it('should list all users', async () => {
@@ -41,7 +41,7 @@ describe('User Controller', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
-    expect(Array.isArray(response.body.message)).toBe(true);
+    expect(Array.isArray(response.body)).toBe(true);
   });
 
   it('shoul list one user by ID', async () => {
@@ -50,7 +50,7 @@ describe('User Controller', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toHaveProperty('email');
+    expect(response.body).toHaveProperty('email');
   });
 
   it('shoul list one user by email', async () => {
@@ -59,7 +59,7 @@ describe('User Controller', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toHaveProperty('name');
+    expect(response.body).toHaveProperty('name');
   });
 
   it('should update a user', async () => {
@@ -73,7 +73,7 @@ describe('User Controller', () => {
       });
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toContain('updated');
+    expect(response.body).toContain('updated');
   });
 
   it('should delete a user', async () => {
@@ -82,6 +82,6 @@ describe('User Controller', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toContain('deleted');
+    expect(response.body).toContain('deleted');
   });
 });
