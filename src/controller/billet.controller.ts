@@ -45,43 +45,45 @@ export async function getByUserId(
   }
 }
 
-// export async function create(req: Request, res: Response): Promise<Response> {
-//   try {
-//     const { status, message } = (await billetService.create(req.body)) as Return;
-//     return res.status(mapStatusHTTP(status)).json({ message });
-//   } catch (error) {
-//     console.error(error);
-//     return res
-//       .status(mapStatusHTTP('INTERNAL_ERROR'))
-//       .json({ message: 'Internal error' });
-//   }
-// }
+export async function create(req: Request, res: Response): Promise<Response> {
+  try {
+    const { status, message } = (await billetService.create(
+      req.body
+    )) as Return;
+    return res.status(mapStatusHTTP(status)).json({ message });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(mapStatusHTTP('INTERNAL_ERROR'))
+      .json({ message: 'Internal error' });
+  }
+}
 
-// export async function update(req: Request, res: Response): Promise<Response> {
-//   try {
-//     const { status, message } = (await billetService.update(
-//       req as any
-//     )) as Return;
-//     return res.status(mapStatusHTTP(status)).json({ message });
-//   } catch (error) {
-//     return res
-//       .status(mapStatusHTTP('INTERNAL_ERROR'))
-//       .json({ message: 'Internal error' });
-//   }
-// }
+export async function update(req: Request, res: Response): Promise<Response> {
+  try {
+    const { status, message } = (await billetService.update(
+      req as any
+    )) as Return;
+    return res.status(mapStatusHTTP(status)).json({ message });
+  } catch (error) {
+    return res
+      .status(mapStatusHTTP('INTERNAL_ERROR'))
+      .json({ message: 'Internal error' });
+  }
+}
 
-// export async function roleDelete(
-//   req: Request,
-//   res: Response
-// ): Promise<Response> {
-//   try {
-//     const { id } = req.params;
-//     const { status, message } = await billetService.deleteRole(id);
-//     return res.status(mapStatusHTTP(status)).json(message);
-//   } catch (error) {
-//     console.error(error);
-//     return res
-//       .status(mapStatusHTTP('INTERNAL_ERROR'))
-//       .json({ message: 'Internal error' });
-//   }
-// }
+export async function billetDelete(
+  req: Request,
+  res: Response
+): Promise<Response> {
+  try {
+    const { id } = req.params;
+    const { status, message } = await billetService.deleteBillet(id);
+    return res.status(mapStatusHTTP(status)).json(message);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(mapStatusHTTP('INTERNAL_ERROR'))
+      .json({ message: 'Internal error' });
+  }
+}

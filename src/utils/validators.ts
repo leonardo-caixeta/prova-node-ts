@@ -6,7 +6,8 @@ import {
   updateUserValidation,
   createUserValidation,
   createRoleValidation,
-  createBilletValidation
+  createBilletValidation,
+  updateBilletValidation
 } from './schemas/schema';
 
 export const validateLogin = ({
@@ -88,7 +89,8 @@ export const validateCreateBillet = (data: IBilletCreate): ValidationResult => {
 };
 
 export const validateUpdateBillet = (data: IBilletUpdate): ValidationResult => {
-  const validation = updateUserValidation.validate(data);
+  const validation = updateBilletValidation.validate(data);
+
   const typeError = validation.error?.details[0].type;
   const message =
     validation.error?.details[0].message || validation.error?.message;

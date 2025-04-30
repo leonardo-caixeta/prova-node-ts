@@ -53,9 +53,9 @@ export const createBilletValidation = Joi.object({
 });
 
 export const updateBilletValidation = Joi.object({
-  valueToPay: Joi.number(),
-  userId: Joi.number(),
-  payDay: Joi.date(),
+  valueToPay: Joi.number().optional(),
+  payDay: Joi.date().optional(),
+  status: Joi.string(),
   dayUserPaid: Joi.date()
 }).messages({
   'any.required': 'All fields must be filled',
