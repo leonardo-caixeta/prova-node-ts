@@ -3,11 +3,12 @@ import { IBilletService } from '../interfaces/IServiceResponse';
 import { ValidationResult } from '../types';
 import { ServiceResponse } from '../types/ServiceResponse';
 import { IBilletUpdateRequest } from '../interfaces/Request';
+import { IBillet, IBilletCreate } from '../interfaces/IBillet';
 
 const prisma = new PrismaClient();
 
 export class BilletService implements IBilletService {
-  async getAll(): Promise<ServiceResponse<TBillet[] | string>> {
+  async getAll(): Promise<ServiceResponse<IBillet[] | string>> {
     const billets = await prisma.billet.findMany({
       include: { user: true }
     });
@@ -15,7 +16,7 @@ export class BilletService implements IBilletService {
 
     return { status: 'SUCCESSFUL', message: billets };
   }
-  async getById(id: string): Promise<ServiceResponse<TBillet | string>> {
+  async getById(id: string): Promise<ServiceResponse<IBillet | string>> {
     if (!id) return { status: 'INVALID_DATA', message: 'Id is required' };
 
     const ID = parseInt(id, 10);
@@ -30,7 +31,7 @@ export class BilletService implements IBilletService {
   }
   async getByUserId(
     userId: string
-  ): Promise<ServiceResponse<TBillet[] | string>> {
+  ): Promise<ServiceResponse<IBillet[] | string>> {
     const userIdNumber = parseInt(userId, 10);
     if (!userId) return { status: 'INVALID_DATA', message: 'Id is required' };
     const unicBillet = await prisma.billet.findMany({
@@ -54,7 +55,7 @@ export class BilletService implements IBilletService {
   ): Promise<ServiceResponse<string> | ValidationResult> {
     throw new Error('Method not implemented.');
   }
-  deleteBillet(id: string): Promise<ServiceResponse<string | TBillet>> {
+  deleteBillet(id: string): Promise<ServiceResponse<string | IBillet>> {
     throw new Error('Method not implemented.');
   }
 }

@@ -1,11 +1,7 @@
 import { Request, Response } from 'express';
 import { RoleService } from '../services/role.service';
 import { mapStatusHTTP } from '../utils/mapStatusHTTP';
-
-type Return = {
-  status: string;
-  message: any;
-};
+import { Return } from '../types';
 
 const roleService = new RoleService();
 export async function get(req: Request, res: Response): Promise<Response> {

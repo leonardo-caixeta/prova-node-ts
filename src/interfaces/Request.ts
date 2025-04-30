@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { IUserUpdate } from './IUser';
+import { IBilletUpdate } from './IBillet';
 
 export interface IUserUpdateRequest extends Request {
   body: IUserUpdate;
