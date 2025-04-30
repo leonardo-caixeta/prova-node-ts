@@ -68,7 +68,7 @@ export class BilletService implements IBilletService {
 
     if (!created) return { status: 'CONFLICT', message: 'Billet not created' };
 
-    return { status: 'SUCCESSFUL', message: 'Billet created' };
+    return { status: 'CREATED', message: 'Billet created' };
   }
   async update(
     req: IBilletUpdateRequest
