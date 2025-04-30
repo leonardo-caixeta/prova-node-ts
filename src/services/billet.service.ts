@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { IBilletService } from '../interfaces/IServiceResponse';
 import { ValidationResult } from '../types';
 import { ServiceResponse } from '../types/ServiceResponse';
+import { IBilletUpdateRequest } from '../interfaces/Request';
 
 const prisma = new PrismaClient();
 
@@ -14,10 +15,11 @@ export class BilletService implements IBilletService {
 
     return { status: 'SUCCESSFUL', message: billets };
   }
-  async getById(id: number): Promise<ServiceResponse<TBillet | string>> {
+  async getById(id: string): Promise<ServiceResponse<TBillet | string>> {
     if (!id) return { status: 'INVALID_DATA', message: 'Id is required' };
 
-    const unicBillet = await prisma.billet.findUnique({ where: { id } });
+    const ID = parseInt(id, 10);
+    const unicBillet = await prisma.billet.findUnique({ where: { id: ID } });
     if (!unicBillet)
       return {
         status: 'NOT_FOUND',
@@ -26,13 +28,18 @@ export class BilletService implements IBilletService {
 
     return { status: 'SUCCESSFUL', message: unicBillet };
   }
-  async getByUserId(id: number): Promise<ServiceResponse<TBillet | string>> {
-    if (!id) return { status: 'INVALID_DATA', message: 'Id is required' };
-    const unicBillet = await prisma.billet.findFirst({ where: { userId: id } });
+  async getByUserId(
+    userId: string
+  ): Promise<ServiceResponse<TBillet[] | string>> {
+    const userIdNumber = parseInt(userId, 10);
+    if (!userId) return { status: 'INVALID_DATA', message: 'Id is required' };
+    const unicBillet = await prisma.billet.findMany({
+      where: { userId: userIdNumber }
+    });
     if (!unicBillet)
       return {
         status: 'NOT_FOUND',
-        message: `Billet with userId: ${id} not found`
+        message: `Billet with userId: ${userId} not found`
       };
 
     return { status: 'SUCCESSFUL', message: unicBillet };
@@ -42,13 +49,12 @@ export class BilletService implements IBilletService {
   ): Promise<ServiceResponse<string> | ValidationResult> {
     throw new Error('Method not implemented.');
   }
-  update(req: {
-    body: IBilletUpdate;
-    params: { id: number };
-  }): Promise<ServiceResponse<string> | ValidationResult> {
+  update(
+    req: IBilletUpdateRequest
+  ): Promise<ServiceResponse<string> | ValidationResult> {
     throw new Error('Method not implemented.');
   }
-  deleteBillet(id: number): Promise<ServiceResponse<string | TBillet>> {
+  deleteBillet(id: string): Promise<ServiceResponse<string | TBillet>> {
     throw new Error('Method not implemented.');
   }
 }

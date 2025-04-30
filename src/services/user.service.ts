@@ -2,7 +2,12 @@ import { PrismaClient } from '@prisma/client';
 import { IUserService } from '../interfaces/IServiceResponse';
 import { ValidationResult } from '../types';
 import { ServiceResponse } from '../types/ServiceResponse';
-import { GetUser, IUserCreate, IUserLogin, IUserUpdate } from '../types/User';
+import {
+  GetUser,
+  IUserCreate,
+  IUserLogin,
+  IUserUpdate
+} from '../interfaces/IUser';
 import {
   validateCreate,
   validateLogin,
@@ -10,7 +15,7 @@ import {
 } from '../utils/validators';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { IUserUpdateRequest } from '../types/Request';
+import { IUserUpdateRequest } from '../interfaces/Request';
 
 const prisma = new PrismaClient();
 
@@ -44,9 +49,10 @@ export class UserService implements IUserService {
 
     return { status: 'SUCCESSFUL', message: users };
   }
-  async getById(id: number): Promise<ServiceResponse<GetUser | string>> {
+  async getById(id: string): Promise<ServiceResponse<GetUser | string>> {
     if (!id) return { status: 'INVALID_DATA', message: 'Id is required' };
-    const unicUser = await prisma.user.findUnique({ where: { id } });
+    const ID = parseInt(id, 10);
+    const unicUser = await prisma.user.findUnique({ where: { id: ID } });
     if (!unicUser)
       return { status: 'NOT_FOUND', message: `User with id: ${id} not found` };
 
@@ -121,12 +127,13 @@ export class UserService implements IUserService {
       message: `User ${name} with id: ${id} was updated`
     };
   }
-  async deleteUser(id: number): Promise<ServiceResponse<string | GetUser>> {
+  async deleteUser(id: string): Promise<ServiceResponse<string | GetUser>> {
     if (!id) return { status: 'INVALID_DATA', message: 'Id is required' };
     const unicUser = await this.getById(id);
+    const ID = parseInt(id, 10);
     if (unicUser.status === 'NOT_FOUND') return unicUser;
 
-    await prisma.user.delete({ where: { id } });
+    await prisma.user.delete({ where: { id: ID } });
     return { status: 'SUCCESSFUL', message: `User with id: ${id} was deleted` };
   }
 }

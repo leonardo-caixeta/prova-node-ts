@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { ValidationResult } from '../types';
 import { validateRole } from '../utils/validators';
 import { IRoleService } from '../interfaces/IServiceResponse';
-import { GetRole } from '../types/Role';
+import { GetRole, IRoleCreate, IRoleUpdate } from '../interfaces/IRole';
 import { ServiceResponse } from '../types/ServiceResponse';
 
 const prisma = new PrismaClient();
@@ -18,8 +18,11 @@ export class RoleService implements IRoleService {
     };
   }
 
-  public async getById(id: number): Promise<ServiceResponse<GetRole | string>> {
-    const unicRole = await prisma.role.findUnique({ where: { id } });
+  public async getById(id: string): Promise<ServiceResponse<GetRole | string>> {
+    if (!id) return { status: 'INVALID_DATA', message: 'Id is required' };
+
+    const idNumber = parseInt(id, 10);
+    const unicRole = await prisma.role.findUnique({ where: { id: idNumber } });
     if (!unicRole)
       return {
         status: 'NOT_FOUND',
@@ -42,9 +45,7 @@ export class RoleService implements IRoleService {
 
   async create({
     name
-  }: {
-    name: string;
-  }): Promise<ServiceResponse<string> | ValidationResult> {
+  }: IRoleCreate): Promise<ServiceResponse<string> | ValidationResult> {
     const validation = validateRole({ name });
     if (validation) return validation;
 
@@ -61,18 +62,18 @@ export class RoleService implements IRoleService {
   async update({
     body,
     params
-  }: {
-    body: { name: string };
-    params: { id: number };
-  }): Promise<ServiceResponse<string> | ValidationResult> {
+  }: IRoleUpdate): Promise<ServiceResponse<string> | ValidationResult> {
     const { name } = body;
-    const { id } = params;
+
+    if (!params.id)
+      return { status: 'INVALID_DATA', message: 'Id is required' };
+    const id = parseInt(params.id, 10);
 
     const validation = validateRole({ name });
     if (validation) return validation;
 
     const roleExists = await prisma.role.findUnique({
-      where: { id: Number(id) }
+      where: { id: id }
     });
     if (!roleExists)
       return {
@@ -90,16 +91,17 @@ export class RoleService implements IRoleService {
     return { status: 'SUCCESSFUL', message: `Role name updated to ${name}` };
   }
 
-  async deleteRole(id: number): Promise<ServiceResponse<string | GetRole>> {
+  async deleteRole(id: string): Promise<ServiceResponse<string | GetRole>> {
+    const idNumber = parseInt(id, 10);
     if (!id) return { status: 'REQUIRED_DATA', message: 'Id is required' };
-    const unicRole = await prisma.role.findUnique({ where: { id } });
+    const unicRole = await prisma.role.findUnique({ where: { id: idNumber } });
     if (!unicRole)
       return {
         status: 'NOT_FOUND',
         message: `Role with id: ${id} not found`
       };
 
-    await prisma.role.delete({ where: { id } });
+    await prisma.role.delete({ where: { id: idNumber } });
 
     return {
       status: 'SUCCESSFUL',

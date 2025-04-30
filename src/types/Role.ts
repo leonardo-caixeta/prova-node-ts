@@ -1,9 +1,4 @@
-import { RoleDTO } from '.';
-
-export interface IRoleCreate {
-  name: string;
-}
-
-export interface GetRole extends RoleDTO {
+export type TRole = {
   id: number;
-}
+  name: string;
+};

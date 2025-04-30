@@ -38,7 +38,7 @@ export async function get(req: Request, res: Response): Promise<Response> {
 
 export async function getById(req: Request, res: Response): Promise<Response> {
   try {
-    const id = parseInt(req.params.id, 10);
+    const { id } = req.params;
     const { status, message } = await userService.getById(id);
 
     return res.status(mapStatusHTTP(status)).json({ message });
@@ -99,7 +99,7 @@ export async function userDelete(
   res: Response
 ): Promise<Response> {
   try {
-    const id = parseInt(req.params.id, 10);
+    const { id } = req.params;
     const { status, message } = await userService.deleteUser(id);
 
     return res.status(mapStatusHTTP(status)).json({ message });

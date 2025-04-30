@@ -19,6 +19,18 @@ export async function get(req: Request, res: Response): Promise<Response> {
   }
 }
 
+export async function getById(req: Request, res: Response): Promise<Response> {
+  try {
+    const { id } = req.params;
+    const { status, message } = await roleService.getById(id);
+    return res.status(mapStatusHTTP(status)).json({ message });
+  } catch (error) {
+    return res
+      .status(mapStatusHTTP('INTERNAL_ERROR'))
+      .json({ message: 'Internal error' });
+  }
+}
+
 export async function getByName(
   req: Request,
   res: Response
@@ -46,18 +58,6 @@ export async function create(req: Request, res: Response): Promise<Response> {
   }
 }
 
-export async function getById(req: Request, res: Response): Promise<Response> {
-  try {
-    const id = parseInt(req.params.id, 10);
-    const { status, message } = await roleService.getById(id);
-    return res.status(mapStatusHTTP(status)).json({ message });
-  } catch (error) {
-    return res
-      .status(mapStatusHTTP('INTERNAL_ERROR'))
-      .json({ message: 'Internal error' });
-  }
-}
-
 export async function update(req: Request, res: Response): Promise<Response> {
   try {
     const { status, message } = (await roleService.update(
@@ -76,7 +76,7 @@ export async function roleDelete(
   res: Response
 ): Promise<Response> {
   try {
-    const id = parseInt(req.params.id, 10);
+    const { id } = req.params;
     const { status, message } = await roleService.deleteRole(id);
     return res.status(mapStatusHTTP(status)).json(message);
   } catch (error) {
